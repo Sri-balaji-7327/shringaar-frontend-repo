@@ -24,26 +24,26 @@ const Home = () => {
     setError('')
     setProductData(null)
 
-  const apiUrl = process.env.REACT_APP_API_URL
+    const apiUrl = import.meta.env.VITE_API_URL
 
-  fetch(`${apiUrl}/api/sheet?code=${productCode}`)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error('Product not found')
-      }
-      return res.json()
-    })
-    .then((data) => {
-      setProductData(data) // Assign the fetched object directly
-      console.log(data, 'product data')
-    })
-    .catch((err) => {
-      console.error(err)
-      setError('Product not found. Please try again.')
-    })
-    .finally(() => {
-      setLoading(false) // Stop loading, regardless of success or failure
-    })
+    fetch(`${apiUrl}/api/sheet?code=${productCode}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Product not found')
+        }
+        return res.json()
+      })
+      .then((data) => {
+        setProductData(data) // Assign the fetched object directly
+        console.log(data, 'product data')
+      })
+      .catch((err) => {
+        console.error(err)
+        setError('Product not found. Please try again.')
+      })
+      .finally(() => {
+        setLoading(false) // Stop loading, regardless of success or failure
+      })
   }
 
   return (

@@ -90,6 +90,17 @@ const Home = () => {
     return data?.[index]?.[1] ?? '-'
   }
 
+  const getValueByLabel = (data, label) => {
+    const row = data?.find(
+      (item) =>
+        String(item?.[0] || '')
+          .trim()
+          .toLowerCase() === label.toLowerCase()
+    )
+
+    return row?.[1] ?? '-'
+  }
+
   const getAmount = (value) => {
     const amount = Number(
       String(value ?? '')
@@ -119,15 +130,25 @@ const Home = () => {
 
     const newProduct = {
       code: productData.code,
-      name: getValue(rows, 2),
-      grossWeight: getValue(rows, 3),
-      lessWeight: getValue(rows, 4),
-      netWeight: getValue(rows, 5),
-      rate: getValue(rows, 6),
-      making: getValue(rows, 7),
-      extra: getValue(rows, 8),
-      price: getAmount(getValue(rows, 9)),
-      quote: rows?.[10]?.[1] || '',
+
+      name: getValueByLabel(rows, 'Item Name'),
+
+      grossWeight: getValueByLabel(rows, 'Gross Weight'),
+
+      lessWeight: getValueByLabel(rows, 'Less Weight'),
+
+      netWeight: getValueByLabel(rows, 'Net Weight'),
+
+      rate: getValueByLabel(rows, 'Rate as on Today (C ONLY)'),
+
+      hisaab: getValueByLabel(rows, 'Hisaab'),
+
+      stOth: getValueByLabel(rows, 'St / Oth'),
+
+      price: getAmount(getValueByLabel(rows, 'Total Est Price (in INR)')),
+
+      quote: getValueByLabel(rows, 'Product Quote'),
+
       quantity: 1,
     }
 
@@ -172,7 +193,7 @@ const Home = () => {
   )
 
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0)
-
+  const totalStOth = cart.reduce((total, item) => total + getAmount(item.stOth), 0)
   const totalWeight = cart.reduce(
     (total, item) => total + getAmount(item.netWeight) * item.quantity,
     0
@@ -500,16 +521,29 @@ const Home = () => {
 
                       <div className='cart-item-details'>
                         <span>
-                          <Weight size={13} />
+                          <Weight size={15} />
                           {item.netWeight} g
                         </span>
 
                         <span>
-                          <Package size={13} />
-                          Qty: {item.quantity}
+                          <Sparkles size={15} />
+                          Hisaab: {item.hisaab}
                         </span>
 
-                        <span>Rate: ₹{item.rate}</span>
+                        <span>
+                          <Package size={15} />
+                          ST / OT: {item.stOth}
+                        </span>
+
+                        <span>
+                          <IndianRupee size={15} />
+                          Rate: {formatAmount(getAmount(item.rate))}
+                        </span>
+
+                        <span>
+                          <ShoppingBag size={15} />
+                          Qty: {item.quantity}
+                        </span>
                       </div>
                     </div>
 
@@ -547,6 +581,11 @@ const Home = () => {
                 <div className='summary-row'>
                   <span>Total Products</span>
                   <strong>{totalItems}</strong>
+                </div>
+
+                <div className='summary-row'>
+                  <span>Total ST / OT</span>
+                  <strong>{formatAmount(totalStOth)}</strong>
                 </div>
 
                 <div className='summary-row'>

@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-      <h1 className='heading'>Sri Balaji Gold and Silver Pvt ltd</h1>
+     
       <Home />
     </>
   )

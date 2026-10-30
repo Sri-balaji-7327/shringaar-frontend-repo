@@ -58,7 +58,11 @@ const Home = () => {
     )}`
 
     try {
-      const res = await fetch(requestUrl)
+      const res = await fetch(requestUrl, {
+        method: 'GET',
+        cache: 'no-store',
+      })
+
       const data = await res.json()
 
       if (!res.ok) {
